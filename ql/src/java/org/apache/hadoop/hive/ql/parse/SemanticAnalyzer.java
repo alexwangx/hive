@@ -7058,10 +7058,14 @@ public class SemanticAnalyzer extends BaseSemanticAnalyzer {
           String typeName = colInfo.getType().getTypeName();
           // CTAS should NOT create a VOID type
           if (typeName.equals(serdeConstants.VOID_TYPE_NAME)) {
-              throw new SemanticException(ErrorMsg.CTAS_CREATES_VOID_TYPE
-              .getMsg(colName));
+//              throw new SemanticException(ErrorMsg.CTAS_CREATES_VOID_TYPE
+//              .getMsg(colName));
+              // FIX Unknown primitive type VOID    @yiducloud
+              // https://issues.apache.org/jira/browse/HIVE-11217
+              col.setType(serdeConstants.STRING_TYPE_NAME);
+          }else {
+              col.setType(typeName);
           }
-          col.setType(typeName);
           field_schemas.add(col);
         }
 
